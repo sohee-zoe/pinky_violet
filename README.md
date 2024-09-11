@@ -2,7 +2,7 @@ pinky_violet
 ==============
 <img src="/doc/Screenshot from 2024-04-26 19-44-15.png" width="40%" height="30%" title="pinky" alt="pinky"></img>
 
-pinky 설정
+pinky ROS2 pkg 
 ---
 ```
 mkidr -p ~/pinky_violet/src
