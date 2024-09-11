@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+import os, glob
 
 package_name = 'pinky_bringup'
 
@@ -10,6 +11,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', glob.glob(os.path.join('launch', '*.launch.xml'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -20,7 +22,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pinky_bringup = pinky_bringup.bringup:main',
+            'pinky_bringup = pinky_bringup.pinky_bringup:main',
         ],
     },
 )
