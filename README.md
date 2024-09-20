@@ -8,16 +8,19 @@ mkidr -p ~/pinky_violet/src
 cd ~/pinky_violet/src
 git clone https://github.com/pinklab-art/pinky_violet.git
 ````
-
-## 2. pinky gpio 권한 설정
+## 2. rpi gpio 라이브러리 설치
+```
+sudo apt install python3-rpi.gpio
+```
+## 3. pinky gpio 권한 설정
 ```
 cd ~/pinky_violet/src/pinky_violet
 sudo cp ./99-gpio.rules /etc/udev/rules.d/
 ```
-## 3. rplidar 설정
+## 4. rplidar 설정
 참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/lidar_setup.md>
 
-## 4. pinky_violet pkg build
+## 5. pinky_violet pkg build
 ```
 cd ~/pinky_violet
 rosdep install --from-paths src --ignore-src -r -y
