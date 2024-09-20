@@ -2,6 +2,9 @@
 
 ##  1.라즈베리파이 설정
 ```
+sudo apt install raspi-config
+```
+```
 sudo raspi-config
 ```
 ```
