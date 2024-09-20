@@ -14,19 +14,19 @@ sudo reboot
 ```
 ## 2. lidar 설치- https://github.com/Slamtec/sllidar_ros2 참고
 ```
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+mkdir -p ~/sllidar_ros2/src
+cd ~/sllidar_ros2/src
 git clone https://github.com/Slamtec/sllidar_ros2.git
-cd ~/ros2_ws/
+cd ~/sllidar_ros2/
 source /opt/ros/<rosdistro>/setup.bash
 colcon build --symlink-install
-echo "source <ros2_ws>/install/setup.bash" >> ~/.bashrc
+echo "source ~/sllidar_ros2/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
 ## 3. sh 파일 수정 
 ```
-sudo nano ~/ros2_ws/src/sllidar_ros2/scripts/create_udev_rules.sh
+sudo nano ~/sllidar_ros2/src/sllidar_ros2/scripts/create_udev_rules.sh
 ```
 
 ```
@@ -34,7 +34,7 @@ sudo nano ~/ros2_ws/src/sllidar_ros2/scripts/create_udev_rules.sh
 
 echo "remap the devices serial port(ttySX) to  RPLIDAR"
 echo "devices connection as /dev/PRLIDAR, check it using the command : ls -l /dev|grep -e -e ttyS0"
-sudo cp $HOME/ros2_ws/src/sllidar_ros2/scripts/rplidar.rules  /etc/udev/rules.d
+sudo cp $HOME/sllidar_ros2/src/sllidar_ros2/scripts/rplidar.rules  /etc/udev/rules.d
 echo " "
 echo "Restarting udev"
 echo ""
@@ -45,7 +45,7 @@ echo "finish "
 ## 4. rules 수정
 #### rplidar.rules 파일을 만들고
 ```
-sudo nano ~/ros2_ws/src/sllidar_ros2/scripts/rplidar.rules
+sudo nano ~/sllidar_ros2/src/sllidar_ros2/scripts/rplidar.rules
 ```
 #### 다음내용 추가
 ```
@@ -58,7 +58,7 @@ KERNEL=="ttyS0", MODE:="0777", SYMLINK+="RPLIDAR"
 
 ## 5. sh 적용
 ```
-sh ~/ros2_ws/src/sllidar_ros2/scripts/create_udev_rules.sh
+sh ~/sllidar_ros2/src/sllidar_ros2/scripts/create_udev_rules.sh
 ```
 ## 6. 설정 터미널 확인 
 ```
