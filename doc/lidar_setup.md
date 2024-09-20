@@ -70,7 +70,7 @@ lrwxrwxrwx 1 root root 5 May 24 11:30 /dev/RPLIDAR -> ttyS0
 
 ## 7.launch 파일 수정(15 line)
 ```
- sudo nano ~/colcon_ws/src/sllidar_ros2/launch/sllidar_c1_launch.py
+ sudo nano ~/sllidar_ros2/src/sllidar_ros2/launch/sllidar_c1_launch.py
  ```
 
 ### -수정 전 
