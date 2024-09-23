@@ -71,7 +71,7 @@ ls -al /dev/RPLIDAR
 lrwxrwxrwx 1 root root 5 May 24 11:30 /dev/RPLIDAR -> ttyS0
 ```
 
-## 7.launch 파일 수정(15 line)
+## 7.launch 파일 수정(15, 17 line)
 ```
  sudo nano ~/sllidar_ros2/src/sllidar_ros2/launch/sllidar_c1_launch.py
  ```
@@ -79,11 +79,15 @@ lrwxrwxrwx 1 root root 5 May 24 11:30 /dev/RPLIDAR -> ttyS0
 ### -수정 전 
 ```
 serial_port = LaunchConfiguration('serial_port', default='/dev/USB0')
+
+frame_id = LaunchConfiguration('frame_id', default='laser')
 ```
 
 ### -수정 후 
 ```
 serial_port = LaunchConfiguration('serial_port', default='/dev/RPLIDAR')
+
+frame_id = LaunchConfiguration('frame_id', default='laser_link')
 ```
 ## 8. Lidar실행 및 터미널 확인
 ```
