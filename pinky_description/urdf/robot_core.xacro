@@ -154,7 +154,7 @@
         <origin xyz="0.001 0 0.003" rpy="0 ${pi/2} 0"/>
     </joint>
 
-    <link name="ydlidar_lidar_mount">
+    <link name="rplidar_lidar_mount">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -174,18 +174,17 @@
         </inertial>
     </link>
 
-    <joint name="idar_mount_fixed_joint" type="fixed">
+    <joint name="lidar_mount_fixed_joint" type="fixed">
         <parent link="base_link"/>
-        <child link="ydlidar_lidar_mount"/>
+        <child link="rplidar_lidar_mount"/>
         <origin xyz="0 0 0.042" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_link"/>
 
     <joint name="laser_link_fixed_joint" type="fixed">
-        <parent link="ydlidar_lidar_mount"/>
+        <parent link="rplidar_lidar_mount"/>
         <child link="laser_link"/>
         <origin xyz="0.0 0 0.03" rpy="0 0 ${pi}"/>
     </joint>
 </robot>
-

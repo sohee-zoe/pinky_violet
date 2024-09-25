@@ -4,7 +4,7 @@ pinky_violet
 
 ## 1. pinky ROS2 pkg clone
 ```
-mkidr -p ~/pinky_violet/src
+mkdir -p ~/pinky_violet/src
 cd ~/pinky_violet/src
 git clone https://github.com/pinklab-art/pinky_violet.git
 ````
