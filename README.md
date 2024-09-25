@@ -44,6 +44,10 @@ ros2 launch pinky_cartographer cartographer.launch.xml
 ```
 ros2 launch pinky_cartographer map_view.launch.xml
 ```
+#### robot control
+```
+ros2 run teleop_twist_keyboard teleop_twist_keyboard 
+```
 #### map save 
 ```
 ros2 run nav2_map_server map_saver_cli -f <map name>
