@@ -1,0 +1,54 @@
+# RPLIDAR C1 SETUP
+
+##  1.라즈베리파이 설정
+```
+sudo apt install raspi-config
+```
+```
+sudo raspi-config
+```
+```
+Interface Options->I2C, 
+"Would you like the ARM I2C interface to be enabled?" Yes로 설정, 
+```
+```
+sudo reboot
+```
+## 2. imu python 라이브러리 설치
+```
+pip3 install sparkfun-qwiic-icm20948
+```
+
+## 3. imu ros2 package 설치
+```
+cd ~/pinky_violet/src
+git clone https://github.com/Slamtec/sllidar_ros2.git
+cd ~/pinky_violet/
+source /opt/ros/<rosdistro>/setup.bash
+colcon build --symlink-install
+```
+
+## 4. 패키지 수정
+#### ros2_icm20948/launch/icm20948_node_launch.py 다음 내용으로 수정 (14, 15 line)
+```
+{"i2c_address": 0x69} -> {"i2c_address": 0x68}
+{"frame_id": "imu_icm20948"} -> {"frame_id": "imu_link"}
+```
+#### /ros2_icm20948/ros2_icm20948/icm20948_node.py 다음 내용으로 수정 (40 line)
+```
+self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu/data_raw", 10) 
+-> self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu", 10)
+```
+
+## 5. 실행
+```
+cd ~/pinky_violet/install/local_setup.bash
+source install/local_setup.bash
+```
+```
+ros2 launch ros2_icm20948 icm20948_node_launch.py
+```
+## 6. 동작 확인 
+```
+ros2 topic echo /imu
+```
