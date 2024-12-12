@@ -28,7 +28,7 @@ self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu/data_raw", 10)
 
 ## 4. 실행
 ```
-cd ~/pinky_violet/install/local_setup.bash
+cd ~/pinky_violet/
 source install/local_setup.bash
 ```
 ```
