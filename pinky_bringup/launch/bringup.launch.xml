@@ -10,6 +10,9 @@
     <include file="$(find-pkg-share sllidar_ros2)/launch/sllidar_c1_launch.py">
     </include>
 
+    <include file="$(find-pkg-share ros2_icm20948)/icm20948_node_launch.py">
+    </include>
+
     <node pkg="pinky_bringup" exec="pinky_bringup"/>
     
 </launch>

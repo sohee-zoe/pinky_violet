@@ -3,21 +3,11 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
 from .pinkylib import Pinky
-from time import sleep
- 
-# GPIO 핀 번호 설정
-AIN1 = 17
-AIN2 = 27
-PWMA = 18
-BIN1 = 5
-BIN2 = 6
-PWMB = 13
-STBY = 25
- 
+
 class MotorControlNode(Node):
  
     def __init__(self):
-        super().__init__('motor_control_node')
+        super().__init__('pinky_bringup')
  
         self.pinky = Pinky()
 
@@ -36,8 +26,8 @@ class MotorControlNode(Node):
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x + angular_z 
-        right_speed = linear_x - angular_z
+        left_speed = linear_x - angular_z 
+        right_speed = linear_x + angular_z
 
         set_l = self.custom_map(left_speed)
         set_r = self.custom_map(right_speed)
