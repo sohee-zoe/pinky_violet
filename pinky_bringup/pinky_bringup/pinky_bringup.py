@@ -4,7 +4,9 @@ from geometry_msgs.msg import Twist
 
 from .pinkylib import Pinky
 
-class MotorControlNode(Node):
+from rcl_interfaces.msg import SetParametersResult
+
+class PinkyBringup(Node):
  
     def __init__(self):
         super().__init__('pinky_bringup')
@@ -20,14 +22,30 @@ class MotorControlNode(Node):
             self.cmd_vel_callback,
             10
         )
+
+        self.declare_parameter('motor_ratio', 1.0)
+        self.motor_ratio = self.get_parameter('motor_ratio').value
+        
+        self.add_on_set_parameters_callback(self.parameter_callback)
+
+    def parameter_callback(self, params):
+        for param in params:
+            if param.name == 'motor_ratio':
+                self.motor_ratio = param.value
+                self.pinky.set_ratio(self.motor_ratio)
+
+        self.get_logger().info(f"set L motor ratio {self.motor_ratio * 100} %")
+        
+        return SetParametersResult(successful=True)
+        
  
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x 
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x - angular_z 
-        right_speed = linear_x + angular_z
+        left_speed = linear_x + angular_z 
+        right_speed = linear_x - angular_z
 
         set_l = self.custom_map(left_speed)
         set_r = self.custom_map(right_speed)
@@ -50,14 +68,14 @@ class MotorControlNode(Node):
         
 def main(args=None):
     rclpy.init(args=args)
-    motor_control_node = MotorControlNode()
+    pinky_bringup_node = PinkyBringup()
      
     try:
-        rclpy.spin(motor_control_node)
+        rclpy.spin(pinky_bringup_node)
     except KeyboardInterrupt:
         pass
     finally:
-        motor_control_node.destroy_node()
+        pinky_bringup_node.destroy_node()
         rclpy.shutdown()
  
 if __name__ == '__main__':
