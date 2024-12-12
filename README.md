@@ -13,9 +13,15 @@ git clone https://github.com/pinklab-art/pinky_violet.git
 sudo apt install python3-rpi.gpio
 ```
 ## 3. pinky gpio 권한 설정
+#### rulse 파일 복사
 ```
 cd ~/pinky_violet/src/pinky_violet
 sudo cp ./99-gpio.rules /etc/udev/rules.d/
+```
+#### udev 적용
+```
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 ```
 ## 4. rplidar 설정
 참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/lidar_setup.md>
