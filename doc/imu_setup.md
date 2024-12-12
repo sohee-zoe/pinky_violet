@@ -1,18 +1,5 @@
-# RPLIDAR C1 SETUP
+# icm20948 IMU SETUP
 
-##  1.라즈베리파이 설정
-```
-sudo apt install raspi-config
-```
-```
-sudo raspi-config
-```
-```
-Interface Options->I2C, 
-"Would you like the ARM I2C interface to be enabled?" Yes로 설정, 
-```
-```
-sudo reboot
 ```
 ## 2. imu python 라이브러리 설치
 ```
@@ -22,7 +9,7 @@ pip3 install sparkfun-qwiic-icm20948
 ## 3. imu ros2 package 설치
 ```
 cd ~/pinky_violet/src
-git clone https://github.com/Slamtec/sllidar_ros2.git
+git clone https://github.com/norlab-ulaval/ros2_icm20948.git
 cd ~/pinky_violet/
 source /opt/ros/<rosdistro>/setup.bash
 colcon build --symlink-install
