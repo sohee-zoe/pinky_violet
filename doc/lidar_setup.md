@@ -1,92 +1,54 @@
 # RPLIDAR C1 SETUP
 
-##  1.UART 설정
-#### /boot/firmware/config.txt 열기
+##  1.라즈베리파이 설정
 ```
-sudo nano /boot/firmware/config.txt
+sudo apt install raspi-config
 ```
-#### 맨아래 추가
 ```
-dtparam=uart0=on
+sudo raspi-config
 ```
-#### 재부팅
+```
+Interface Options->I2C, 
+"Would you like the ARM I2C interface to be enabled?" Yes로 설정, 
+```
 ```
 sudo reboot
 ```
-#### AMA0가 생겼는지 확인
+## 2. imu python 라이브러리 설치
 ```
-ls /dev/ttyAMA*
+pip3 install sparkfun-qwiic-icm20948
 ```
-## 2. lidar 설치- https://github.com/Slamtec/sllidar_ros2 참고
+
+## 3. imu ros2 package 설치
 ```
 cd ~/pinky_violet/src
 git clone https://github.com/Slamtec/sllidar_ros2.git
 cd ~/pinky_violet/
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/<rosdistro>/setup.bash
 colcon build --symlink-install
 ```
 
-## 3. lidar udev 설정
-#### rplidar.rules 파일을 만들고
+## 4. 패키지 수정
+#### ros2_icm20948/launch/icm20948_node_launch.py 다음 내용으로 수정 (14, 15 line)
 ```
-sudo nano /etc/udev/rules.d/rplidar.rules
+{"i2c_address": 0x69} -> {"i2c_address": 0x68}
+{"frame_id": "imu_icm20948"} -> {"frame_id": "imu_link"}
 ```
-#### 다음내용 추가
+#### /ros2_icm20948/ros2_icm20948/icm20948_node.py 다음 내용으로 수정 (40 line)
 ```
-# set the udev rule , make the device_port be fixed by rplidar
-#
-KERNEL=="ttyAMA0", MODE:="0777", SYMLINK+="RPLIDAR"
-```
-
-## 4. rulse 적용
-```
-sudo udevadm control --reload-rules
-sudo udevadm trigger
-```
-## 5. 설정 터미널 확인 
-```
-ls -al /dev/RPLIDAR
-```
-```
-lrwxrwxrwx 1 root root 7 Dec 12 15:50 /dev/RPLIDAR -> ttyAMA0
-```
-위와 같이 출력이 안되면 재부팅후 다시확인
-```
-sudo reboot
+self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu/data_raw", 10) 
+-> self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu", 10)
 ```
 
-## 6.launch 파일 수정(15, 17 line)
+## 5. 실행
 ```
- sudo nano ~/pinky_violet/src/sllidar_ros2/launch/sllidar_c1_launch.py
- ```
-
-### -수정 전 
-```
-serial_port = LaunchConfiguration('serial_port', default='/dev/USB0')
-
-frame_id = LaunchConfiguration('frame_id', default='laser')
-```
-
-### -수정 후 
-```
-serial_port = LaunchConfiguration('serial_port', default='/dev/RPLIDAR')
-
-frame_id = LaunchConfiguration('frame_id', default='laser_link')
-```
-## 7. Lidar실행 및 터미널 확인
-```
-ros2 launch sllidar_ros2 sllidar_c1_launch.py
+cd ~/pinky_violet/install/local_setup.bash
+source install/local_setup.bash
 ```
 ```
-[INFO] [launch]: All log files can be found below /home/pi/.ros/log/2024-05-24-11-33-27-987100-raspberrypi-1131
-[INFO] [launch]: Default logging verbosity is set to INFO
-[INFO] [sllidar_node-1]: process started with pid [1134]
-[sllidar_node-1] [INFO] [1716518008.416250815] [sllidar_node]: SLLidar running on ROS2 package SLLidar.ROS2 SDK Version:1.0.1, SLLIDAR SDK Version:2.1.0
-[sllidar_node-1] [INFO] [1716518008.919035964] [sllidar_node]: SLLidar S/N: EBE2E1F4C2E398C0BCEA9AF365394806
-[sllidar_node-1] [INFO] [1716518008.919179575] [sllidar_node]: Firmware Ver: 1.01
-[sllidar_node-1] [INFO] [1716518008.919226575] [sllidar_node]: Hardware Rev: 18
-[sllidar_node-1] [INFO] [1716518008.919647703] [sllidar_node]: SLLidar health status : 0
-[sllidar_node-1] [INFO] [1716518008.919734814] [sllidar_node]: SLLidar health status : OK.
-[sllidar_node-1] [INFO] [1716518009.150550095] [sllidar_node]: current scan mode: Standard, sample rate: 5 Khz, max_distance: 16.0 m, scan frequency:10.0 Hz,
-
+ros2 launch ros2_icm20948 icm20948_node_launch.py
+```
+## 6. 동작 확인 
+```
+ros2 topic echo /imu
 ```
