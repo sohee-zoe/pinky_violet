@@ -1,12 +1,11 @@
 # icm20948 IMU SETUP
 
-```
-## 2. imu python 라이브러리 설치
+## 1. imu python 라이브러리 설치
 ```
 pip3 install sparkfun-qwiic-icm20948
 ```
 
-## 3. imu ros2 package 설치
+## 2. imu ros2 package 설치
 ```
 cd ~/pinky_violet/src
 git clone https://github.com/norlab-ulaval/ros2_icm20948.git
@@ -15,7 +14,7 @@ source /opt/ros/<rosdistro>/setup.bash
 colcon build --symlink-install
 ```
 
-## 4. 패키지 수정
+## 3. 패키지 수정
 #### ros2_icm20948/launch/icm20948_node_launch.py 다음 내용으로 수정 (14, 15 line)
 ```
 {"i2c_address": 0x69} -> {"i2c_address": 0x68}
@@ -27,7 +26,7 @@ self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu/data_raw", 10)
 -> self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu", 10)
 ```
 
-## 5. 실행
+## 4. 실행
 ```
 cd ~/pinky_violet/install/local_setup.bash
 source install/local_setup.bash
@@ -35,7 +34,7 @@ source install/local_setup.bash
 ```
 ros2 launch ros2_icm20948 icm20948_node_launch.py
 ```
-## 6. 동작 확인 
+## 5. 동작 확인 
 ```
 ros2 topic echo /imu
 ```
