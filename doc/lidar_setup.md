@@ -57,7 +57,7 @@ sudo reboot
 
 ## 6.launch 파일 수정(15, 17 line)
 ```
- sudo nano ~/sllidar_ros2/src/sllidar_ros2/launch/sllidar_c1_launch.py
+ sudo nano ~/pinky_violet/src/sllidar_ros2/launch/sllidar_c1_launch.py
  ```
 
 ### -수정 전 
