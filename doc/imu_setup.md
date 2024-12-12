@@ -10,7 +10,7 @@ pip3 install sparkfun-qwiic-icm20948
 cd ~/pinky_violet/src
 git clone https://github.com/norlab-ulaval/ros2_icm20948.git
 cd ~/pinky_violet/
-source /opt/ros/<rosdistro>/setup.bash
+source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 ```
 
