@@ -21,7 +21,7 @@ mkdir -p ~/sllidar_ros2/src
 cd ~/sllidar_ros2/src
 git clone https://github.com/Slamtec/sllidar_ros2.git
 cd ~/sllidar_ros2/
-source /opt/ros/<rosdistro>/setup.bash
+source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 echo "source ~/sllidar_ros2/install/setup.bash" >> ~/.bashrc
 source ~/.bashrc
