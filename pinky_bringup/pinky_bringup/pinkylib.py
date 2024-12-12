@@ -207,7 +207,7 @@ class Pinky:
             GPIO.output(BIN1, GPIO.HIGH)
             GPIO.output(BIN2, GPIO.LOW)
         
-        self.pwm_R.ChangeDutyCycle(abs(R * self.ratio))
+        self.pwm_R.ChangeDutyCycle(abs(R))
 
     def stop(self):
         GPIO.output(AIN1, GPIO.LOW)
