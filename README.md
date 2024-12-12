@@ -10,8 +10,7 @@ git clone https://github.com/pinklab-art/pinky_violet.git
 ````
 ## 2. dependence 설치
 ```
-sudo apt install python3-rpi.gpio
-sudo apt install python3-lgpio
+sudo apt install python3-rpi-lgpio
 sudo apt install python3-spidev
 ```
 ## 3. pinky gpio 권한 설정
