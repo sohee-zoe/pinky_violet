@@ -1,79 +1,63 @@
 # RPLIDAR C1 SETUP
 
-##  1.라즈베리파이 설정
+##  1.UART 설정
+#### /boot/firmware/config.txt 열기
 ```
-sudo apt install raspi-config
+sudo nano /boot/firmware/config.txt
 ```
+#### 맨아래 추가
 ```
-sudo raspi-config
+dtparam=uart0=on
 ```
-```
-Interface Options->Serial Port로 이동하여, 
-"Would you like a login shell to be accessible over serial?"에 No, 
-"Would you like the serial port hardware to be enabled?" "Yes로 설정합니다.
-```
+#### 재부팅
 ```
 sudo reboot
 ```
+#### AMA0가 생겼는지 확인
+```
+ls /dev/ttyAMA*
+```
 ## 2. lidar 설치- https://github.com/Slamtec/sllidar_ros2 참고
 ```
-mkdir -p ~/sllidar_ros2/src
-cd ~/sllidar_ros2/src
+cd ~/pinky_violet/src
 git clone https://github.com/Slamtec/sllidar_ros2.git
-cd ~/sllidar_ros2/
-source /opt/ros/jazzy/setup.bash
+cd ~/pinky_violet/
+source /opt/ros/$ROS_DISTRO/setup.bash
 colcon build --symlink-install
-echo "source ~/sllidar_ros2/install/setup.bash" >> ~/.bashrc
-source ~/.bashrc
 ```
 
-## 3. sh 파일 수정 
-```
-sudo nano ~/sllidar_ros2/src/sllidar_ros2/scripts/create_udev_rules.sh
-```
-
-```
-#!/bin/bash
-
-echo "remap the devices serial port(ttySX) to  RPLIDAR"
-echo "devices connection as /dev/PRLIDAR, check it using the command : ls -l /dev|grep -e -e ttyS0"
-sudo cp $HOME/sllidar_ros2/src/sllidar_ros2/scripts/rplidar.rules  /etc/udev/rules.d
-echo " "
-echo "Restarting udev"
-echo ""
-sudo udevadm trigger
-echo "finish "
-```
-
-## 4. rules 수정
+## 3. lidar udev 설정
 #### rplidar.rules 파일을 만들고
 ```
-sudo nano ~/sllidar_ros2/src/sllidar_ros2/scripts/rplidar.rules
+sudo nano /etc/udev/rules.d/rplidar.rules
 ```
 #### 다음내용 추가
 ```
 # set the udev rule , make the device_port be fixed by rplidar
 #
-#KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0777", SYMLINK+="rplidar"
-
-KERNEL=="ttyS0", MODE:="0777", SYMLINK+="RPLIDAR"
+KERNEL=="ttyAMA0", MODE:="0777", SYMLINK+="RPLIDAR"
 ```
 
-## 5. sh 적용
+## 4. rulse 적용
 ```
-sh ~/sllidar_ros2/src/sllidar_ros2/scripts/create_udev_rules.sh
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 ```
-## 6. 설정 터미널 확인 
+## 5. 설정 터미널 확인 
 ```
 ls -al /dev/RPLIDAR
 ```
 ```
-lrwxrwxrwx 1 root root 5 May 24 11:30 /dev/RPLIDAR -> ttyS0
+lrwxrwxrwx 1 root root 7 Dec 12 15:50 /dev/RPLIDAR -> ttyAMA0
+```
+위와 같이 출력이 안되면 재부팅후 다시확인
+```
+sudo reboot
 ```
 
-## 7.launch 파일 수정(15, 17 line)
+## 6.launch 파일 수정(15, 17 line)
 ```
- sudo nano ~/sllidar_ros2/src/sllidar_ros2/launch/sllidar_c1_launch.py
+ sudo nano ~/pinky_violet/src/sllidar_ros2/launch/sllidar_c1_launch.py
  ```
 
 ### -수정 전 
@@ -89,7 +73,7 @@ serial_port = LaunchConfiguration('serial_port', default='/dev/RPLIDAR')
 
 frame_id = LaunchConfiguration('frame_id', default='laser_link')
 ```
-## 8. Lidar실행 및 터미널 확인
+## 7. Lidar실행 및 터미널 확인
 ```
 ros2 launch sllidar_ros2 sllidar_c1_launch.py
 ```
