@@ -20,6 +20,9 @@ sudo cp ./99-gpio.rules /etc/udev/rules.d/
 ## 4. rplidar 설정
 참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/lidar_setup.md>
 
+## 5. IMU 설정
+참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/imu_setup.md>
+
 ## 5. pinky_violet pkg build
 ```
 cd ~/pinky_violet
