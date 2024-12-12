@@ -23,7 +23,7 @@ sudo cp ./99-gpio.rules /etc/udev/rules.d/
 ## 5. IMU 설정
 참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/imu_setup.md>
 
-## 5. pinky_violet pkg build
+## 6. pinky_violet pkg build
 ```
 cd ~/pinky_violet
 rosdep install --from-paths src --ignore-src -r -y
