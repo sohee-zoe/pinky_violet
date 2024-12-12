@@ -8,9 +8,11 @@ mkdir -p ~/pinky_violet/src
 cd ~/pinky_violet/src
 git clone https://github.com/pinklab-art/pinky_violet.git
 ````
-## 2. rpi gpio 라이브러리 설치
+## 2. dependence 설치
 ```
 sudo apt install python3-rpi.gpio
+sudo apt install python3-lgpio
+sudo apt install python3-spidev
 ```
 ## 3. pinky gpio 권한 설정
 ```
