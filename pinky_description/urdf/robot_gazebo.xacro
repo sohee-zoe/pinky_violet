@@ -1,23 +1,27 @@
 <?xml version="1.0"?>
-<robot name="my_mobile" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="pinky" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <gazebo reference="left_wheel">
-        <mu1>200</mu1>
-        <mu2>200</mu2>
-        <kp>10000000.0</kp>
-        <kd>1.0</kd>
+        <selfCollide>false</selfCollide>
+            <mu1 value="1.2" />
+            <mu2 value="1.2" />
     </gazebo>
 
     <gazebo reference="right_wheel">
-        <mu1>200</mu1>
-        <mu2>200</mu2>
-        <kp>10000000.0</kp>
-        <kd>1.0</kd>
+        <selfCollide>false</selfCollide>
+            <mu1 value="1.2" />
+            <mu2 value="1.2" />
     </gazebo>
 
     <gazebo reference="base_link">
-        <mu1>0.0</mu1>
-        <mu2>0.0</mu2>
+	  <selfCollide>false</selfCollide>
+      <mu1 value="0.05" />
+      <mu2 value="0.05" />
+    </gazebo>
+
+    <gazebo reference="caster">
+      <mu1 value="0.05" />
+      <mu2 value="0.05" />
     </gazebo>
 
 </robot>
