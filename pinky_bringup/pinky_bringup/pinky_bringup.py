@@ -1,8 +1,10 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 
 from .pinkylib import Pinky
+from .battery import Battery
 
 from rcl_interfaces.msg import SetParametersResult
 
@@ -12,21 +14,31 @@ class PinkyBringup(Node):
         super().__init__('pinky_bringup')
  
         self.pinky = Pinky()
+        self.battery = Battery()
 
         self.pinky.enable_motor()
         self.pinky.start_motor()
  
-        self.subscription = self.create_subscription(
+        self.cmd_vel_subscription = self.create_subscription(
             Twist,
-            'cmd_vel',
+            '/cmd_vel',
             self.cmd_vel_callback,
             10
         )
+
+        self.battery_publisher = self.create_publisher(
+            Float32,
+            '/pinky_battery_present',
+            10
+        )
+        self.timer = self.create_timer(5.0, self.battery_callback)
 
         self.declare_parameter('motor_ratio', 1.0)
         self.motor_ratio = self.get_parameter('motor_ratio').value
         
         self.add_on_set_parameters_callback(self.parameter_callback)
+
+        self.get_logger().info("pinky is ready!!")
 
     def parameter_callback(self, params):
         for param in params:
@@ -37,15 +49,20 @@ class PinkyBringup(Node):
         self.get_logger().info(f"set L motor ratio {self.motor_ratio * 100} %")
         
         return SetParametersResult(successful=True)
-        
+
+    def battery_callback(self):
+        msg = Float32()
+        msg.data = self.battery.get_battery()
+
+        self.battery_publisher.publish(msg)
  
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x 
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x + angular_z 
-        right_speed = linear_x - angular_z
+        left_speed = linear_x - angular_z 
+        right_speed = linear_x + angular_z
 
         set_l = self.custom_map(left_speed)
         set_r = self.custom_map(right_speed)
