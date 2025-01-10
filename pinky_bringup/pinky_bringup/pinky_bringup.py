@@ -1,43 +1,68 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 
 from .pinkylib import Pinky
-from time import sleep
- 
-# GPIO 핀 번호 설정
-AIN1 = 17
-AIN2 = 27
-PWMA = 18
-BIN1 = 5
-BIN2 = 6
-PWMB = 13
-STBY = 25
- 
-class MotorControlNode(Node):
+from .battery import Battery
+
+from rcl_interfaces.msg import SetParametersResult
+
+class PinkyBringup(Node):
  
     def __init__(self):
-        super().__init__('motor_control_node')
+        super().__init__('pinky_bringup')
  
         self.pinky = Pinky()
+        self.battery = Battery()
 
         self.pinky.enable_motor()
         self.pinky.start_motor()
  
-        self.subscription = self.create_subscription(
+        self.cmd_vel_subscription = self.create_subscription(
             Twist,
-            'cmd_vel',
+            '/cmd_vel',
             self.cmd_vel_callback,
             10
         )
+
+        self.battery_publisher = self.create_publisher(
+            Float32,
+            '/pinky_battery_present',
+            10
+        )
+        self.timer = self.create_timer(5.0, self.battery_callback)
+
+        self.declare_parameter('motor_ratio', 1.0)
+        self.motor_ratio = self.get_parameter('motor_ratio').value
+        
+        self.add_on_set_parameters_callback(self.parameter_callback)
+
+        self.get_logger().info("pinky is ready!!")
+
+    def parameter_callback(self, params):
+        for param in params:
+            if param.name == 'motor_ratio':
+                self.motor_ratio = param.value
+                self.pinky.set_ratio(self.motor_ratio)
+
+        self.get_logger().info(f"set L motor ratio {self.motor_ratio * 100} %")
+        
+        return SetParametersResult(successful=True)
+
+    def battery_callback(self):
+        msg = Float32()
+        msg.data = self.battery.get_battery()
+
+        self.battery_publisher.publish(msg)
  
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x 
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x + angular_z 
-        right_speed = linear_x - angular_z
+        left_speed = linear_x - angular_z 
+        right_speed = linear_x + angular_z
 
         set_l = self.custom_map(left_speed)
         set_r = self.custom_map(right_speed)
@@ -60,14 +85,14 @@ class MotorControlNode(Node):
         
 def main(args=None):
     rclpy.init(args=args)
-    motor_control_node = MotorControlNode()
+    pinky_bringup_node = PinkyBringup()
      
     try:
-        rclpy.spin(motor_control_node)
+        rclpy.spin(pinky_bringup_node)
     except KeyboardInterrupt:
         pass
     finally:
-        motor_control_node.destroy_node()
+        pinky_bringup_node.destroy_node()
         rclpy.shutdown()
  
 if __name__ == '__main__':
