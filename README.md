@@ -48,7 +48,7 @@ ros2 launch pinky_bringup bringup.launch.xml
 or (set left_motor ratio)
 ```
 source ~/pinky_violet/install/local_setup.bash
-ros2 launch pinky_bringup bringup.launch.xml ratio:=0.9
+ros2 launch pinky_bringup bringup.launch.xml motor_ratio:=0.9
 ```
 
 Map building
