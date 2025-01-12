@@ -61,7 +61,7 @@ class PinkyBringup(Node):
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x - angular_z * self.motor_ratio
+        left_speed = linear_x - angular_z
         right_speed = linear_x + angular_z
 
         set_l = self.custom_map(left_speed)
