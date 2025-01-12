@@ -8,15 +8,18 @@ mkdir -p ~/pinky_violet/src
 cd ~/pinky_violet/src
 git clone https://github.com/pinklab-art/pinky_violet.git
 ````
-## 2. rpi gpio 라이브러리 설치
+## 2. dependence 설치
 ```
-sudo apt install python3-rpi.gpio
+sudo apt install python3-rpi-lgpio
+sudo apt install python3-spidev
+pip install smbus2
+pip install adafruit-circuitpython-ads1x15
 ```
 ## 3. pinky gpio 권한 설정
 #### rulse 파일 복사
 ```
 cd ~/pinky_violet/src/pinky_violet
-sudo cp ./99-gpio.rules /etc/udev/rules.d/
+sudo cp ./99-pinky_gpio.rules /etc/udev/rules.d/
 ```
 #### udev 적용
 ```
@@ -24,9 +27,12 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 ## 4. rplidar 설정
-참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/lidar_setup.md>
+참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/lidar_setup.md>
 
-## 5. pinky_violet pkg build
+## 5. IMU 설정
+참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/imu_setup.md>
+
+## 6. pinky_violet pkg build
 ```
 cd ~/pinky_violet
 rosdep install --from-paths src --ignore-src -r -y

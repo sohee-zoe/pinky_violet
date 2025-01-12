@@ -1,8 +1,23 @@
 <?xml version="1.0"?>
-<robot name="my_mobile" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="pinky" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:property name="wheel_separation" value="0.1"/>
     <xacro:property name="wheel_diameter" value="0.06"/>
+    <xacro:include filename="inertial_macros.xacro"/>
+
+    <xacro:property name="chassis_length" value="0.10"/>
+    <xacro:property name="chassis_width" value="0.08"/>
+    <xacro:property name="chassis_height" value="0.06"/>
+    <xacro:property name="chassis_mass" value="1.0"/>
+    <xacro:property name="wheel_radius" value="0.03"/>
+    <xacro:property name="wheel_thickness" value="0.014"/>
+    <xacro:property name="wheel_mass" value="0.05"/>
+    <xacro:property name="caster_wheel_radius" value="0.01"/>
+    <xacro:property name="caster_wheel_mass" value="0.7"/>
+
+    <material name="white">
+        <color rgba="1 1 1 1" />
+    </material>
 
     <link name="base_footprint"/>
 
@@ -12,7 +27,15 @@
         <origin xyz="0 0 ${wheel_diameter/2}" rpy="0 0 0"/>
     </joint>
 
-	<link name="base_link">
+	<link name="base_link"/>
+    
+     <joint name="chassis_fixed_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+	<link name="chassis">
 		<visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -20,17 +43,41 @@
             </geometry>
         </visual>
         <collision>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <origin xyz="-0.01 0 0.01" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://pinky_description/meshes/collision/base_link.stl" scale="1 1 1"/>
+                <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
             </geometry>
         </collision>
-        <inertial>
-            <origin xyz="-0.02 0 0.028" rpy="0 0 0"/>
-            <mass value="0.5"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
-        </inertial>
+        <xacro:inertial_box mass="${chassis_mass}" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
+            <origin xyz="-0.01 0 0.01" rpy="0 0 0"/>
+        </xacro:inertial_box>
 	</link>
+    
+    
+    <joint name="caster_fixed_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="caster"/>
+        <origin xyz="-0.044 0 -0.02" rpy="0 0 0"/>
+    </joint>
+
+	<link name="caster">
+      <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="${caster_wheel_radius}"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="${caster_wheel_radius}"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_sphere mass="${caster_wheel_mass}" radius="${caster_wheel_radius}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_sphere>
+    </link>
 
     <joint name="left_wheel_joint" type="continuous">
         <parent link="base_link"/>
@@ -49,14 +96,12 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://pinky_description/meshes/collision/wheel.stl" scale="1 1 1"/>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
             </geometry>
         </collision>
-        <inertial>
+        <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_thickness}" radius="${wheel_radius}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-            <mass value="0.3"/>
-            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-        </inertial>
+        </xacro:inertial_cylinder>
     </link>
 
     <joint name="right_wheel_joint" type="continuous">
@@ -76,14 +121,12 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://pinky_description/meshes/collision/wheel.stl" scale="1 1 1"/>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
             </geometry>
         </collision>
-        <inertial>
+        <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_thickness}" radius="${wheel_radius}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-            <mass value="0.3"/>
-            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
-        </inertial>
+        </xacro:inertial_cylinder>
     </link>
 
     <link name="ul_sensor_mount">
@@ -107,7 +150,7 @@
     </link>
 
     <joint name="ul_sensor_mount_fixed_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis"/>
         <child link="ul_sensor_mount"/>
         <origin xyz="0.038 -0.002 -0.0035" rpy="0 0 0"/>
     </joint>
@@ -141,7 +184,7 @@
     </link>
 
     <joint name="front_camera_mount_fixed_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="chassis"/>
         <child link="front_camera_mount"/>
         <origin xyz="0.05 -0.001 0.028" rpy="0 0 0"/>
     </joint>
@@ -151,10 +194,10 @@
     <joint name="camera_link_fixed_joint" type="fixed">
         <parent link="front_camera_mount"/>
         <child link="camera_link"/>
-        <origin xyz="0.001 0 0.003" rpy="0 ${pi/2} 0"/>
+        <origin xyz="0.001 0 0.003" rpy="0 0 0"/>
     </joint>
 
-    <link name="rplidar_lidar_mount">
+    <link name="lidar_lidar_mount">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -175,16 +218,32 @@
     </link>
 
     <joint name="lidar_mount_fixed_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="rplidar_lidar_mount"/>
+        <parent link="chassis"/>
+        <child link="lidar_lidar_mount"/>
         <origin xyz="0 0 0.042" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_link"/>
 
     <joint name="laser_link_fixed_joint" type="fixed">
-        <parent link="rplidar_lidar_mount"/>
+        <parent link="lidar_lidar_mount"/>
         <child link="laser_link"/>
         <origin xyz="0.0 0 0.03" rpy="0 0 ${pi}"/>
     </joint>
+
+    <link name="imu_link">
+        <sensor name="imu_sensor" type="imu">
+            <always_on>1</always_on>
+            <update_rate>1</update_rate>
+            <visualize>true</visualize>
+            <topic>imu</topic>
+        </sensor>
+    </link>
+    
+    <joint name="imu_link_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="imu_link"/>
+        <origin xyz="0 0 0.03" rpy="0 0 0"/>
+    </joint>
+
 </robot>

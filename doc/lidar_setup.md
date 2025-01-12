@@ -1,54 +1,79 @@
 # RPLIDAR C1 SETUP
 
-##  1.라즈베리파이 설정
+##  1.UART 설정
+#### /boot/firmware/config.txt 열기
 ```
-sudo apt install raspi-config
+sudo nano /boot/firmware/config.txt
 ```
+#### 맨아래 추가
 ```
-sudo raspi-config
+dtparam=uart0=on
 ```
-```
-Interface Options->I2C, 
-"Would you like the ARM I2C interface to be enabled?" Yes로 설정, 
-```
+#### 재부팅
 ```
 sudo reboot
 ```
-## 2. imu python 라이브러리 설치
+#### AMA0가 생겼는지 확인
 ```
-pip3 install sparkfun-qwiic-icm20948
+ls /dev/ttyAMA*
 ```
-
-## 3. imu ros2 package 설치
+## 2. lidar 설치- https://github.com/Slamtec/sllidar_ros2 참고
 ```
 cd ~/pinky_violet/src
 git clone https://github.com/Slamtec/sllidar_ros2.git
 cd ~/pinky_violet/
-source /opt/ros/<rosdistro>/setup.bash
+source /opt/ros/$ROS_DISTRO/setup.bash
 colcon build --symlink-install
 ```
 
-## 4. 패키지 수정
-#### ros2_icm20948/launch/icm20948_node_launch.py 다음 내용으로 수정 (14, 15 line)
+## 3. lidar udev 설정
+#### rplidar.rules 파일을 만들고
 ```
-{"i2c_address": 0x69} -> {"i2c_address": 0x68}
-{"frame_id": "imu_icm20948"} -> {"frame_id": "imu_link"}
+sudo nano /etc/udev/rules.d/rplidar.rules
 ```
-#### /ros2_icm20948/ros2_icm20948/icm20948_node.py 다음 내용으로 수정 (40 line)
+#### 다음내용 추가
 ```
-self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu/data_raw", 10) 
--> self.imu_pub_ = self.create_publisher(sensor_msgs.msg.Imu, "/imu", 10)
+# set the udev rule , make the device_port be fixed by rplidar
+#
+KERNEL=="ttyAMA0", MODE:="0777", SYMLINK+="RPLIDAR"
 ```
 
-## 5. 실행
+## 4. rulse 적용
 ```
-cd ~/pinky_violet/install/local_setup.bash
-source install/local_setup.bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+## 5. 설정 터미널 확인 
+```
+ls -al /dev/RPLIDAR
 ```
 ```
-ros2 launch ros2_icm20948 icm20948_node_launch.py
+lrwxrwxrwx 1 root root 7 Dec 12 15:50 /dev/RPLIDAR -> ttyAMA0
 ```
-## 6. 동작 확인 
+위와 같이 출력이 안되면 재부팅후 다시확인
+```
+sudo reboot
+```
+
+## 6.launch 파일 수정(15, 17 line)
+```
+ sudo nano ~/pinky_violet/src/sllidar_ros2/launch/sllidar_c1_launch.py
+ ```
+
+### -수정 전 
+```
+serial_port = LaunchConfiguration('serial_port', default='/dev/USB0')
+
+frame_id = LaunchConfiguration('frame_id', default='laser')
+```
+
+### -수정 후 
+```
+serial_port = LaunchConfiguration('serial_port', default='/dev/RPLIDAR')
+
+frame_id = LaunchConfiguration('frame_id', default='laser_link')
+```
+## 7. Lidar실행 및 터미널 확인
 ```
 ros2 topic echo /imu
 ```
