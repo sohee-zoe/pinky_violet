@@ -12,7 +12,7 @@
     <arg name="use_composition" default="True"/>
     <arg name="use_respawn" default="False"/>
     <arg name="log_level" default="info"/>
-    <arg name="lifecycle_nodes_local" default="['map_server']"/>
+    <arg name="lifecycle_nodes_local" default="['map_server', 'amcl']"/>
     <arg name="lifecycle_nodes_nav" default="['controller_server',
                        'smoother_server',
                        'planner_server',
