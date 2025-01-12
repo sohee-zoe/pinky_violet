@@ -35,7 +35,8 @@ class PinkyBringup(Node):
 
         self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력이 오른쪽 모터 출력에 비례해 조정되는 파라미터 
         self.motor_ratio = self.get_parameter('motor_ratio').value
-        
+        self.pinky.set_ratio(self.motor_ratio)
+     
         self.add_on_set_parameters_callback(self.parameter_callback)
 
         self.get_logger().info("pinky is ready!!")
