@@ -33,7 +33,7 @@ class PinkyBringup(Node):
         )
         self.timer = self.create_timer(5.0, self.battery_callback)
 
-        self.declare_parameter('motor_ratio', 1.0)
+        self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력이 오른쪽 모터 출력에 비례해 조정되는 파라미터 
         self.motor_ratio = self.get_parameter('motor_ratio').value
         
         self.add_on_set_parameters_callback(self.parameter_callback)
@@ -61,7 +61,7 @@ class PinkyBringup(Node):
         angular_z = msg.angular.z / 5
 
         # 좌우 회전
-        left_speed = linear_x - angular_z 
+        left_speed = linear_x - angular_z * self.motor_ratio
         right_speed = linear_x + angular_z
 
         set_l = self.custom_map(left_speed)
