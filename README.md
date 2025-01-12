@@ -12,6 +12,8 @@ git clone https://github.com/pinklab-art/pinky_violet.git
 ```
 sudo apt install python3-rpi-lgpio
 sudo apt install python3-spidev
+pip install smbus2
+pip install adafruit-circuitpython-ads1x15
 ```
 ## 3. pinky gpio 권한 설정
 ```
