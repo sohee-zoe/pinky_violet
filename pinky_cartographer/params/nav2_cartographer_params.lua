@@ -19,11 +19,11 @@ include "trajectory_builder.lua"
 options = {
   map_builder = MAP_BUILDER,
   trajectory_builder = TRAJECTORY_BUILDER,
-  map_frame = "odom",
+  map_frame = "map",
   tracking_frame = "imu_link",
   published_frame = "base_footprint",
   odom_frame = "odom",
-  provide_odom_frame = false,
+  provide_odom_frame = true,
   publish_frame_projected_to_2d = true,
   publish_tracked_pose = true,
   use_odometry = false,
