@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
 import os, glob
+
 package_name = 'pinky_emotion'
 
 setup(
@@ -10,6 +11,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/emotion', glob.glob(os.path.join('emotion', '*.*'))),
         ('share/' + package_name + '/emotion', glob.glob(os.path.join('emotion', '*.gif'))),
     ],
     install_requires=['setuptools'],
@@ -21,7 +23,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "pinky_emotion=pinky_emotion.pinky_emotion"
+            "pinky_emotion=pinky_emotion.pinky_emotion:main"
         ],
     },
 )

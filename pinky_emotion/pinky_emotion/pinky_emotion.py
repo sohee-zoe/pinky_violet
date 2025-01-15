@@ -1,6 +1,5 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
 from ament_index_python.packages import get_package_share_directory
 from PIL import Image, ImageSequence
 import os
@@ -10,17 +9,13 @@ from .pinky_lcd import LCD
 
 class PinkyEmotion(Node):
     def __init__(self):
-        super().__init__('pinky_bringup')
+        super().__init__('pinky_emotion')
 
-        self.face_path = os.path.join(get_package_share_directory('pinky_lcd'), 'emotion')
-        self.subscription = self.create_subscription(
-            String,
-            'set_emotion',
-            self.lcd_callback,
-            10
-        )
-        
+        self.emotion_path = os.path.join(get_package_share_directory('pinky_emotion'), 'emotion')
+        self.emotion_service = self.create_service(Emotion, 'set_emotion', self.lcd_callback)
+
         self.lcd = LCD()
+        self.get_logger().info(f"Pinky's emotion server is ready!!")
 
     def lcd_callback(self, request, response):
         emo = request.emotion
@@ -28,32 +23,34 @@ class PinkyEmotion(Node):
         response.response = f"Pinky's emotion set to {emo}"
         
         if emo == "hello":
-            self.play_gif(self.face_path + "/hello.gif")
+            self.play_gif(self.emotion_path + "/hello.gif")
         
         elif emo == "basic":
-            self.play_gif(self.face_path + "/basic.gif")
+            self.play_gif(self.emotion_path + "/basic.gif")
         
         elif emo == "angry":
-            self.play_gif(self.face_path + "/angry.gif")
+            self.play_gif(self.emotion_path + "/angry.gif")
         
         elif emo == "bored":
-            self.play_gif(self.face_path + "/bored.gif")
+            self.play_gif(self.emotion_path + "/bored.gif")
 
         elif emo == "fun":
-            self.play_gif(self.face_path + "/fun.gif")
+            self.play_gif(self.emotion_path + "/fun.gif")
             
         elif emo == "happy":
-            self.play_gif(self.face_path + "/happy.gif")
+            self.play_gif(self.emotion_path + "/happy.gif")
 
         elif emo == "interest":
-            self.play_gif(self.face_path + "/interest.gif")
+            self.play_gif(self.emotion_path + "/interest.gif")
 
         elif emo == "sad":
-            self.play_gif(self.face_path + "/sad.gif")
+            self.play_gif(self.emotion_path + "/sad.gif")
 
         else:
             response.response = "wrong command"
             self.get_logger().info("wrong command")
+
+        self.lcd.fill_black()
 
         return response
 
