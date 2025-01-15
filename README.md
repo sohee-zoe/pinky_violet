@@ -81,5 +81,16 @@ ros2 launch pinky_navigation bringup_launch.xml map:=<map name>
 ros2 launch pinky_navigation nav2_view.launch.xml
 ```
 
+Emotion
+--------------
+#### start emotion server
+```
+ros2 run pinky_emotion pinky_emotion
+```
+#### set emotion
+```
+ros2 service call /set_emotion pinky_interfaces/srv/Emotion "{emotion: hello}"
+```
+
 
 
