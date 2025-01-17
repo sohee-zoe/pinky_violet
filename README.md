@@ -1,7 +1,32 @@
 pinky_violet
 ==============
 <img src="/doc/Screenshot from 2024-04-26 19-44-15.png" width="40%" height="30%" title="pinky" alt="pinky"></img>
-
+# PC 설정
+## 환경
+- ubuntu 24.04
+- ros2 jazzy
+- rmw_fastrtps_cpp
+## 1. pinky ROS2 pkg clone
+```
+mkdir -p ~/pinky_violet/src
+cd ~/pinky_violet/src
+git clone https://github.com/pinklab-art/pinky_violet.git
+```
+## 2. dependence 설치
+```
+cd ~/pinky_violet
+rosdep install --from-paths src --ignore-src -r -y
+```
+## 3. build
+```
+cd ~/pinky_violet
+colcon build
+```
+# ROBOT 설정
+## 환경
+- ubuntu 24.04
+- ros2 jazzy
+- rmw_fastrtps_cpp
 ## 1. pinky ROS2 pkg clone
 ```
 mkdir -p ~/pinky_violet/src
@@ -37,6 +62,11 @@ sudo udevadm trigger
 cd ~/pinky_violet
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
+```
+## 7. set bahsrc
+```
+echo 'source ~/pinky_violet/install/setup.bash' >> ~/.bashrc
+source ~/.bashrc
 ```
 ---
 Pinky brinup
