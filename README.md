@@ -87,7 +87,7 @@ Map building
 ```
 ros2 launch pinky_cartographer cartographer.launch.xml
 ```
-#### map view 
+#### [ONLY PC] map view 
 ```
 ros2 launch pinky_cartographer map_view.launch.xml
 ```
@@ -106,7 +106,7 @@ Navigation2
 ```
 ros2 launch pinky_navigation bringup_launch.xml map:=<map name>
 ```
-#### nav2 view
+#### [ONLY PC] nav2 view
 ```
 ros2 launch pinky_navigation nav2_view.launch.xml
 ```
