@@ -33,7 +33,7 @@ class PinkyBringup(Node):
         )
         self.timer = self.create_timer(5.0, self.battery_callback)
 
-        self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력이 오른쪽 모터 출력에 비례해 조정되는 파라미터 
+        self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력 비율 설정
         self.motor_ratio = self.get_parameter('motor_ratio').value
         self.pinky.set_ratio(self.motor_ratio)
      
@@ -74,9 +74,11 @@ class PinkyBringup(Node):
         if value == 0:
             return 0
         elif value > 0:
-            return 25 + ((value * 20) / 0.5)
+            result = 25 + ((value * 20) / 0.5)
         else:
-            return -25 + ((value * 20) / 0.5)
+            result = -25 + ((value * 20) / 0.5)
+        
+        return max(min(result, 100), -100)
 
     def destroy_node(self):
         # PWM 정지 및 GPIO 정리
