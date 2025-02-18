@@ -1,10 +1,8 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Float32
 
 from .pinkylib import Pinky
-from .battery import Battery
 
 from rcl_interfaces.msg import SetParametersResult
 
@@ -14,7 +12,6 @@ class PinkyBringup(Node):
         super().__init__('pinky_bringup')
  
         self.pinky = Pinky()
-        self.battery = Battery()
 
         self.pinky.enable_motor()
         self.pinky.start_motor()
@@ -25,13 +22,6 @@ class PinkyBringup(Node):
             self.cmd_vel_callback,
             10
         )
-
-        self.battery_publisher = self.create_publisher(
-            Float32,
-            '/pinky_battery_present',
-            10
-        )
-        self.timer = self.create_timer(5.0, self.battery_callback)
 
         self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력 비율 설정
         self.motor_ratio = self.get_parameter('motor_ratio').value
@@ -50,12 +40,6 @@ class PinkyBringup(Node):
         self.get_logger().info(f"set L motor ratio {self.motor_ratio * 100} %")
         
         return SetParametersResult(successful=True)
-
-    def battery_callback(self):
-        msg = Float32()
-        msg.data = self.battery.get_battery()
-
-        self.battery_publisher.publish(msg)
  
     def cmd_vel_callback(self, msg):
         linear_x = msg.linear.x 
@@ -95,6 +79,7 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        pinky_bringup_node.pinky.clean()
         pinky_bringup_node.destroy_node()
         rclpy.shutdown()
  

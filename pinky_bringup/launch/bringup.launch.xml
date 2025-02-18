@@ -18,4 +18,6 @@
         <param name="motor_ratio" value="$(var motor_ratio)"/>
     </node>
     
+    <node pkg="pinky_bringup" exec="pinky_battery_publiser"/>
+    
 </launch>
