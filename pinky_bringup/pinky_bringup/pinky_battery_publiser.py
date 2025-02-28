@@ -2,10 +2,10 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from .battery import Battery
+from .pinkylib import Battery
 from std_msgs.msg import Float32
 
-class SimplePublisher(Node):
+class BatteryPublisher(Node):
     def __init__(self):
         super().__init__('battery_publihser')
         self.battery = Battery()
@@ -26,7 +26,7 @@ class SimplePublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    publisher = SimplePublisher()
+    publisher = BatteryPublisher()
     rclpy.spin(publisher)
     publisher.destroy_node()
     rclpy.shutdown()
