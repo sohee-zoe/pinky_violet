@@ -23,7 +23,8 @@ setup(
     entry_points={
         'console_scripts': [
             'pinky_bringup = pinky_bringup.pinky_bringup:main',
-            'pinky_battery_publiser = pinky_bringup.pinky_battery_publiser:main',
+            'camera = pinky_bringup.camera:main',
+            'pinky_battery_publiser=pinky_bringup.pinky_battery_publiser:main'
         ],
     },
 )

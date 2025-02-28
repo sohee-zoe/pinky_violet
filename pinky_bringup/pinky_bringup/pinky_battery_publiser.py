@@ -5,7 +5,7 @@ from std_msgs.msg import String
 from .battery import Battery
 from std_msgs.msg import Float32
 
-class BatteryPublisher(Node):
+class SimplePublisher(Node):
     def __init__(self):
         super().__init__('battery_publihser')
         self.battery = Battery()
@@ -26,17 +26,10 @@ class BatteryPublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    publisher = BatteryPublisher()
-
-    try:
-        rclpy.spin(publisher)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        publisher.battery.clean()
-        publisher.destroy_node()
-        rclpy.shutdown()
- 
+    publisher = SimplePublisher()
+    rclpy.spin(publisher)
+    publisher.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
