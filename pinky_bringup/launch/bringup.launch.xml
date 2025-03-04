@@ -20,7 +20,7 @@
 
     <!-- <node pkg="pinky_bringup" exec="camera">
     </node> -->
-    <!-- <node pkg="pinky_bringup" exec="pinky_battery_publiser">
+    <node pkg="pinky_bringup" exec="pinky_battery_publiser">
     </node>
-     -->
+    
 </launch>
