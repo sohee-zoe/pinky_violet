@@ -34,15 +34,9 @@ class PinkyBringup(Node):
         self.get_logger().info("pinky is ready!!")
         
         self.motor_timer = self.create_timer(0.1, self.stop_callback)
-        self.cnt = 100
         self.start_time = 0
 
-    def stop_callback(self):
-        if self.cnt > 5:
-            self.pinky.stop()
-
-        self.cnt += 1
-
+ 
     def parameter_callback(self, params):
         for param in params:
             if param.name == 'motor_ratio':
