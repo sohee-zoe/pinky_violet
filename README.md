@@ -106,6 +106,10 @@ Navigation2
 ```
 ros2 launch pinky_navigation bringup_launch.xml map:=<map name>
 ```
+or (set initial pose)
+```
+ros2 launch pinky_navigation initialpose_bringup_launch.xml map:=<map name>
+```
 #### [ONLY PC] nav2 view
 ```
 ros2 launch pinky_navigation nav2_view.launch.xml
