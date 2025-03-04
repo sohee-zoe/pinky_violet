@@ -32,9 +32,6 @@ class PinkyBringup(Node):
         self.add_on_set_parameters_callback(self.parameter_callback)
 
         self.get_logger().info("pinky is ready!!")
-        
-        self.motor_timer = self.create_timer(0.1, self.stop_callback)
-        self.start_time = 0
 
  
     def parameter_callback(self, params):
@@ -48,7 +45,6 @@ class PinkyBringup(Node):
         return SetParametersResult(successful=True)
  
     def cmd_vel_callback(self, msg):
-        self.start_time = time.time()
         linear_x = msg.linear.x 
         angular_z = msg.angular.z / 5
 
