@@ -1,17 +1,19 @@
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 
-from .pinkylib import Pinky
+from .pinkylib import Motor
 
 from rcl_interfaces.msg import SetParametersResult
+import time
 
 class PinkyBringup(Node):
  
     def __init__(self):
         super().__init__('pinky_bringup')
  
-        self.pinky = Pinky()
+        self.pinky = Motor()
 
         self.pinky.enable_motor()
         self.pinky.start_motor()
@@ -20,7 +22,7 @@ class PinkyBringup(Node):
             Twist,
             '/cmd_vel',
             self.cmd_vel_callback,
-            10
+            1
         )
 
         self.declare_parameter('motor_ratio', 1.0) # 왼쪽 모터 출력 비율 설정
@@ -30,6 +32,16 @@ class PinkyBringup(Node):
         self.add_on_set_parameters_callback(self.parameter_callback)
 
         self.get_logger().info("pinky is ready!!")
+        
+        self.motor_timer = self.create_timer(0.1, self.stop_callback)
+        self.cnt = 100
+        self.start_time = 0
+
+    def stop_callback(self):
+        if self.cnt > 5:
+            self.pinky.stop()
+
+        self.cnt += 1
 
     def parameter_callback(self, params):
         for param in params:
@@ -42,6 +54,7 @@ class PinkyBringup(Node):
         return SetParametersResult(successful=True)
  
     def cmd_vel_callback(self, msg):
+        self.start_time = time.time()
         linear_x = msg.linear.x 
         angular_z = msg.angular.z / 5
 
@@ -53,6 +66,7 @@ class PinkyBringup(Node):
         set_r = self.custom_map(right_speed)
  
         self.pinky.move(set_l, set_r)
+        self.cnt = 0
 
     def custom_map(self, value):
         if value == 0:
@@ -65,7 +79,6 @@ class PinkyBringup(Node):
         return max(min(result, 100), -100)
 
     def destroy_node(self):
-        # PWM 정지 및 GPIO 정리
         self.pinky.disable_motor()
         self.pinky.stop_motor()
         self.pinky.clean()
@@ -79,7 +92,6 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        pinky_bringup_node.pinky.clean()
         pinky_bringup_node.destroy_node()
         rclpy.shutdown()
  

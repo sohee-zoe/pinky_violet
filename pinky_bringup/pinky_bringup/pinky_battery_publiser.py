@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from .battery import Battery
+from .pinkylib import Battery
 from std_msgs.msg import Float32
 
 class BatteryPublisher(Node):
@@ -27,16 +27,9 @@ class BatteryPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
     publisher = BatteryPublisher()
-
-    try:
-        rclpy.spin(publisher)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        publisher.battery.clean()
-        publisher.destroy_node()
-        rclpy.shutdown()
- 
+    rclpy.spin(publisher)
+    publisher.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
