@@ -194,7 +194,7 @@
     <joint name="camera_link_fixed_joint" type="fixed">
         <parent link="front_camera_mount"/>
         <child link="camera_link"/>
-        <origin xyz="0.001 0 0.003" rpy="0 0 0"/>
+        <origin xyz="0.001 0 0.003" rpy="-${pi/2} 0 -${pi/2}"/>
     </joint>
 
     <link name="lidar_lidar_mount">
