@@ -52,10 +52,10 @@ sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 ## 4. rplidar 설정
-참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/lidar_setup.md>
+참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/lidar_setup.md>
 
 ## 5. IMU 설정
-참고: <https://github.com/pinklab-art/pinky_violet/blob/jazzy/doc/imu_setup.md>
+참고: <https://github.com/pinklab-art/pinky_violet/blob/main/doc/imu_setup.md>
 
 ## 6. pinky_violet pkg build
 ```
