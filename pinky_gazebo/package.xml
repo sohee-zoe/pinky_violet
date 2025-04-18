@@ -4,7 +4,7 @@
   <name>pinky_gazebo</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="kyung133851@pinkab.art">mkh</maintainer>
+  <maintainer email="kyung133851@pinklab.art">mkh</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -13,8 +13,6 @@
   <depend>ros_gz_image</depend>
   <depend>ros_gz_sim</depend>
   <depend>pinky_description</depend>
-  <depend>gz_ros2_control</depend>
-  <depend>gazebo_ros2_control</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
