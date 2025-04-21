@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.8">
-  <world name="world_demo">
+  <world name="pinky_factory">
     <physics name="1ms" type="ignored">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
@@ -50,7 +50,7 @@
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size>4 2</size>
+              <size>4 3</size>
             </plane>
           </geometry>
           <material>
@@ -82,26 +82,28 @@
   <include>
     <uri>model://shelf</uri>
     <name>shelf_1</name>
-    <pose>-1 -0.5 0 0 0 0</pose>
+    <pose>-0.65 -0.3 0 0 0 -1.57</pose>
   </include>
 
   <include>
     <uri>model://shelf</uri>
     <name>shelf_2</name>
-    <pose>1 -0.5 0 0 0 0</pose>
+    <pose>1.4 -0.7 0 0 0 0</pose>
   </include>
 
   <include>
     <uri>model://shelf</uri>
     <name>shelf_3</name>
-    <pose>-1 0.5 0 0 0 0</pose>
+    <pose>-1.05 0.5 0 0 0 0</pose>
   </include>
 
   <include>
     <uri>model://shelf</uri>
     <name>shelf_4</name>
-    <pose>1 0.5 0 0 0 0</pose>
+    <pose>1.4 0.5 0 0 0 0</pose>
   </include>
+  
+
 
   <model name="robot_arm_box">
     <static>true</static>
@@ -153,7 +155,7 @@
 
   <model name="wall_front">
     <static>true</static>
-    <pose>0 1 0.11 0 0 0</pose>
+    <pose>0 1.5 0.11 0 0 0</pose>
     <link name="wall_link_front">
       <visual name="wall_visual_front">
         <geometry>
@@ -178,7 +180,7 @@
 
   <model name="wall_back">
     <static>true</static>
-    <pose>0 -1 0.11 0 0 3.14</pose>
+    <pose>0 -1.5 0.11 0 0 3.14</pose>
     <link name="wall_link_back">
       <visual name="wall_visual_back">
         <geometry>
@@ -209,7 +211,7 @@
       <visual name="wall_visual_left">
         <geometry>
           <box>
-            <size>2 0.01 0.44</size>
+            <size>3 0.01 0.44</size>
           </box>
         </geometry>
         <material>
@@ -220,7 +222,7 @@
       <collision name="wall_collision_left">
         <geometry>
           <box>
-            <size>2 0.01 0.44</size>
+            <size>3 0.01 0.44</size>
           </box>
         </geometry>
       </collision>
@@ -235,7 +237,7 @@
       <visual name="wall_visual_right">
         <geometry>
           <box>
-            <size>2 0.01 0.44</size>
+            <size>3 0.01 0.44</size>
           </box>
         </geometry>
         <material>
@@ -246,7 +248,7 @@
       <collision name="wall_collision_right">
         <geometry>
           <box>
-            <size>2 0.01 0.44</size>
+            <size>3 0.01 0.44</size>
           </box>
         </geometry>
       </collision>
