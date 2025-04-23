@@ -24,7 +24,8 @@ setup(
         'console_scripts': [
             'pinky_bringup = pinky_bringup.pinky_bringup:main',
             'camera = pinky_bringup.camera:main',
-            'pinky_battery_publiser=pinky_bringup.pinky_battery_publiser:main'
+            'pinky_battery_publiser=pinky_bringup.pinky_battery_publiser:main',
+            'pinky_teleop_keyboard = pinky_bringup.pinky_teleop_keyboard:main'
         ],
     },
 )
