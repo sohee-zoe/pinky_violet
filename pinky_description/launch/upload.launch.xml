@@ -2,8 +2,14 @@
 
 <launch>
     <arg name="use_sim_time" default="True"/>
+    <arg name="frame_prefix" default=""/>
+
     <node pkg="robot_state_publisher" exec="robot_state_publisher" name='robot_state_publisher' output='screen'>
         <param name="robot_description" value="$(command 'xacro $(find-pkg-share pinky_description)/urdf/robot.urdf.xacro')"/>
         <param name='use_sim_time' value='$(var use_sim_time)'/>
+        <param name="frame_prefix" value="$(var frame_prefix)"/>
+
+        <!-- <remap from="/tf" to="tf"/>
+        <remap from="/tf_static" to="tf_static"/> -->
     </node>
 </launch>

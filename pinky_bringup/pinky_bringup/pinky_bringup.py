@@ -20,7 +20,7 @@ class PinkyBringup(Node):
  
         self.cmd_vel_subscription = self.create_subscription(
             Twist,
-            '/cmd_vel',
+            'cmd_vel',
             self.cmd_vel_callback,
             1
         )

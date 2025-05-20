@@ -9,8 +9,18 @@ from picamera2 import Picamera2
 class CameraPublisher(Node):
     def __init__(self):
         super().__init__('camera_publisher')
-        self.image_publisher = self.create_publisher(Image, '/image_raw', 10)
-        self.info_publisher = self.create_publisher(CameraInfo, '/camera_info', 10)
+
+        self.declare_parameter('frame_id', 'camera')
+        base_frame_id = self.get_parameter('frame_id').get_parameter_value().string_value
+        current_namespace = self.get_namespace()
+        if current_namespace == '/':  # 루트 네임스페이스인 경우
+            self.camera_frame_id = base_frame_id
+        else:
+            # 네임스페이스가 '/'로 시작하므로 중복 슬래시 제거
+            self.camera_frame_id = current_namespace.lstrip('/') + '/' + base_frame_id
+
+        self.image_publisher = self.create_publisher(Image, 'image_raw', 10)
+        self.info_publisher = self.create_publisher(CameraInfo, 'camera_info', 10)
         self.timer = self.create_timer(0.1, self.publish_image)
         self.info_timer = self.create_timer(1.0, self.publish_camera_info)
         
@@ -55,7 +65,8 @@ class CameraPublisher(Node):
     def publish_camera_info(self):
         if self.camera_info:
             self.camera_info.header.stamp = self.get_clock().now().to_msg()
-            self.camera_info.header.frame_id = 'camera'
+            # self.camera_info.header.frame_id = 'camera'
+            self.camera_info.header.frame_id = self.camera_frame_id
             self.info_publisher.publish(self.camera_info)
 
     def publish_image(self):
@@ -65,7 +76,8 @@ class CameraPublisher(Node):
         
         msg = Image()
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = 'camera'
+        # msg.header.frame_id = 'camera'
+        msg.header.frame_id = self.camera_frame_id
         msg.height = frame.shape[0]
         msg.width = frame.shape[1]
         msg.encoding = 'rgb8'

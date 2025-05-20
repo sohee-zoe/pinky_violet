@@ -1,5 +1,6 @@
 <?xml version='1.0' ?>
 <launch>
+    <arg name="robot_namespace" default=""/>
     <arg name="use_sim_time" default="false"/>
     <arg name="cartographer_prefix" default="$(find-pkg-share pinky_cartographer)"/>
     <arg name="cartographer_config_dir" default="$(var cartographer_prefix)/params"/>
@@ -11,6 +12,13 @@
 
     <node pkg="cartographer_ros" exec="cartographer_node" name='cartographer_node' args="-configuration_directory $(var cartographer_config_dir) -configuration_basename $(var configuration_basename)">
         <param name='use_sim_time' value="$(var use_sim_time)"/>
+        <remap from="odom" to="odom"/> <!-- Lua 파일의 use_odometry=true일 때 구독할 Odometry 메시지 토픽 (예: /libro0/odom) -->
+        <remap from="scan" to="scan"/> <!-- 예: /libro0/scan -->
+        <remap from="imu" to="imu"/>   <!-- 예: /libro0/imu -->
+        <remap from="/tf" to="tf"/>
+        <remap from="/tf_static" to="tf_static"/>
+        <!-- Cartographer가 발행하는 map 토픽 등도 네임스페이스화 할 수 있음 (선택적) -->
+        <!-- <remap from="/map" to="map"/> -->
     </node>
     
     <node pkg="cartographer_ros" exec="cartographer_occupancy_grid_node" name='cartographer_occupancy_grid_node' args="-resolution $(var resolution) -publish_period_sec $(var publish_period_sec)" unless="$(var use_nav2)">

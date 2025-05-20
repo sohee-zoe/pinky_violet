@@ -12,7 +12,7 @@ class BatteryPublisher(Node):
 
         self.battery_publisher = self.create_publisher(
             Float32,
-            '/pinky_battery_present',
+            'pinky_battery_present',
             10
         )
         self.timer = self.create_timer(5.0, self.battery_callback)
