@@ -1,5 +1,19 @@
 pinky_violet
 ==============
+# 네임스페이스 설정
+
+`pinky_violet/pinky_bringup/launch/bringup.launch.xml` 파일 수정
+```
+<arg name="namespace" default="libro1"/>
+```
+
+또는
+```
+ros2 launch pinky_bringup bringup.launch.xml namespace:=libro1
+```
+
+
+---
 <img src="/doc/Screenshot from 2024-04-26 19-44-15.png" width="40%" height="30%" title="pinky" alt="pinky"></img>
 # PC 설정
 ## 환경
